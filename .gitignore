@@ -1,5 +1,6 @@
 #intellj 
 *.iml
+.idea/
 # Compiled class file
 *.class
 
