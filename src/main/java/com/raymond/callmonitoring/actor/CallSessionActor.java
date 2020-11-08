@@ -32,6 +32,7 @@ public class CallSessionActor implements Runnable {
     //case1: actor 内部队列如果满了要怎么处理
     //case2: actor 内部如果某条消息失败了要怎么处理
     //case3: 自己怎么封装一个actor model
+    //case4: 这样的实现方式有问题，当此actor 没有结束时会一直占用线程资源，其他的actor没法被执行
     public void run() {
         try {
             while (true) {

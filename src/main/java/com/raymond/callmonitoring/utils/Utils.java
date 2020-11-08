@@ -3,7 +3,16 @@ package com.raymond.callmonitoring.utils;
 import com.raymond.callmonitoring.model.CallSession;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
+
 public class Utils {
+
+    public static long diffTimestamp(Date time){
+        if(time==null){
+            return new Date().getTime();
+        }
+        return new Date().getTime() - time.getTime();
+    }
 
     public static String getActorName(CallSession callSession){
         if (callSession.getToUserId() == null || StringUtils.isEmpty(callSession.getSessionId())) {

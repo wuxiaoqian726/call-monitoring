@@ -64,7 +64,6 @@ public class CallSessionGeneratorImpl {
         private final int probability;
         private final CallSessionStatus status;
 
-
         public NextPhaseStatus(int probability, CallSessionStatus status) {
             this.probability = probability;
             this.status=status;

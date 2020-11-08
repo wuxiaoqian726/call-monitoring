@@ -35,7 +35,6 @@ public class RocketMqConsumer implements CallConsumer {
                     for (MessageExt msg : msgs) {
                         String callSession = new String(msg.getBody(), Charset.forName("UTF-8"));
                         //logger.info("consume message:{}", callSession);
-                        //CallSessionActorManager.getInstance().sendCallSessionToActorSystem(JSONUtils.toObject(callSession, CallSession.class));
                         CallSessionActorManager.getInstance().sendCallSessionToAkkaActorSystem(JSONUtils.toObject(callSession, CallSession.class));
                     }
                     return ConsumeOrderlyStatus.SUCCESS;
