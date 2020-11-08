@@ -18,15 +18,9 @@
             </plugin>
         </plugins>
     </build>
-    <name>rocket example</name>
+    <name>Call Monitoring</name>
     <packaging>pom</packaging>
-
-    <!--<properties>-->
-        <!--<akka.version>2.6.10</akka.version>-->
-        <!--<scala.binary.version>2.13</scala.binary.version>-->
-    <!--</properties>-->
-
-
+    
 
     <dependencies>
         <dependency>

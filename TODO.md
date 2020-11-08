@@ -1,7 +1,7 @@
 # Notification
 1. Webscoket as notification protocol;
 2. Webscoket https support;
-3. Webscoket JWS validation support;  
+3. Webscoket JWT validation support;  
 
 # Akka
 1. Akka custom configuration like concurrency and thread pool type;
