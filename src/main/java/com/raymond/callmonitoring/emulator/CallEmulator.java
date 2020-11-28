@@ -1,6 +1,6 @@
 package com.raymond.callmonitoring.emulator;
 
-import com.raymond.callmonitoring.producer.CallProducer;
+import com.raymond.callmonitoring.service.CallProducer;
 import com.raymond.callmonitoring.utils.Constants;
 import org.apache.rocketmq.common.ThreadFactoryImpl;
 import org.slf4j.Logger;
@@ -21,8 +21,8 @@ public class CallEmulator {
 
     public CallEmulator(CallProducer producer) {
         this.producerExectuor = new ThreadPoolExecutor(
-                Constants.CONCURRENCY,
-                Constants.CONCURRENCY,
+                10,
+                10,
                 1000 * 60,
                 TimeUnit.MILLISECONDS,
                 this.queue,
@@ -38,6 +38,7 @@ public class CallEmulator {
             runnables.add(new Runnable() {
                 @Override
                 public void run() {
+
                     while (true) {
                         try {
                             CallSessionGenerationTask task = new CallSessionGenerationTask(producer);

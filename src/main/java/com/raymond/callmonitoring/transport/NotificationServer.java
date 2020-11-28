@@ -1,6 +1,14 @@
 package com.raymond.callmonitoring.transport;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.PoisonPill;
+import akka.actor.Props;
+import com.raymond.callmonitoring.AkkaActorSystem;
+import com.raymond.callmonitoring.actor.CallSubscriptionActor;
+import com.raymond.callmonitoring.model.CallSubscription;
 import com.raymond.callmonitoring.utils.NettyDirectMemReporter;
+import com.raymond.callmonitoring.utils.Utils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -10,12 +18,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotificationServer {
 
@@ -60,14 +67,29 @@ public class NotificationServer {
 
                 @Override
                 public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                    String userId = (String) msg;
-                    logger.info("connection created for userId:{}", userId);
-                    if (userId == null) {
+                    Long queueId = Long.valueOf(msg.toString());
+                    logger.info("connection created for userId:{}", queueId);
+                    if (queueId == null) {
                         //TODO: double check
                         ctx.channel().close();
                         return;
                     }
-                    SubscriptionHolder.getInstance().addSubscription(userId, ctx.channel());
+
+                    ActorSystem actorSystem = AkkaActorSystem.getInstance().getActorSystem();
+                    List<Long> queueIds = new ArrayList<>();
+                    queueIds.add(queueId);
+                    CallSubscription callSubscription = new CallSubscription();
+                    callSubscription.setQueueIdList(queueIds);
+                    String uniqueChannelId = Utils.getUniqueChannelId(ctx.channel());
+                    actorSystem.actorOf(Props.create(CallSubscriptionActor.class, ctx.channel(), callSubscription), uniqueChannelId);
+                }
+
+
+                @Override
+                public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+                    ActorSystem actorSystem = AkkaActorSystem.getInstance().getActorSystem();
+                    actorSystem.actorSelection(Utils.getActorPath(Utils.getUniqueChannelId(ctx.channel()))).tell(PoisonPill.getInstance(), ActorRef.noSender());
+                    super.channelInactive(ctx);
                 }
 
                 @Override

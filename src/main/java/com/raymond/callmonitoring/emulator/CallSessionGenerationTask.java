@@ -2,7 +2,7 @@ package com.raymond.callmonitoring.emulator;
 
 import com.raymond.callmonitoring.model.CallSession;
 import com.raymond.callmonitoring.model.CallSessionStatus;
-import com.raymond.callmonitoring.producer.CallProducer;
+import com.raymond.callmonitoring.service.CallProducer;
 import org.apache.commons.lang3.RandomUtils;
 
 public class CallSessionGenerationTask implements Runnable {

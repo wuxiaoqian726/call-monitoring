@@ -1,4 +1,6 @@
-package com.raymond.callmonitoring.model;
+package com.raymond.callmonitoring.service;
+
+import com.raymond.callmonitoring.model.CallSession;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

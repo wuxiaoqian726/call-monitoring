@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 public class NotificationClient {
     private static final Logger logger = LoggerFactory.getLogger(NotificationClient.class);
-    private final String userId;
+    private final String queueId;
 
-    public NotificationClient(String userId) {
-        this.userId = userId;
+    public NotificationClient(String queueId) {
+        this.queueId = queueId;
     }
 
     public void start() {
@@ -34,7 +34,7 @@ public class NotificationClient {
                             @Override
                             public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                 ByteBuf message = Unpooled.buffer();
-                                message.writeBytes((userId + "\t").getBytes("UTF-8"));
+                                message.writeBytes((queueId + "\t").getBytes("UTF-8"));
                                 ctx.writeAndFlush(message);
                                 logger.info("client send end...");
                             }

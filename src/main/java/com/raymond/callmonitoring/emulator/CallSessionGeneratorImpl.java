@@ -88,6 +88,7 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(generateSessionId());
             session.setToUserId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
+            session.setToQueueId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Queue_Waiting);
             session.setTimeStamp(new Date());
             return session;
@@ -100,7 +101,8 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(previousSession.getSessionId());
             session.setToUserId(previousSession.getToUserId());
-            session.setToExtensionId(RandomUtils.nextLong(100000001,1000000001));
+            session.setToQueueId(previousSession.getToQueueId());
+            session.setToAgentId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Agent_Waiting);
             session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
@@ -114,7 +116,8 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(previousSession.getSessionId());
             session.setToUserId(previousSession.getToUserId());
-            session.setToExtensionId(previousSession.getToExtensionId());
+            session.setToQueueId(previousSession.getToQueueId());
+            session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Calling);
             session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
@@ -128,7 +131,8 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(previousSession.getSessionId());
             session.setToUserId(previousSession.getToUserId());
-            session.setToExtensionId(previousSession.getToExtensionId());
+            session.setToQueueId(previousSession.getToQueueId());
+            session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Holding);
             session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
@@ -141,7 +145,8 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(previousSession.getSessionId());
             session.setToUserId(previousSession.getToUserId());
-            session.setToExtensionId(previousSession.getToExtensionId());
+            session.setToQueueId(previousSession.getToQueueId());
+            session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Ended);
             session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());

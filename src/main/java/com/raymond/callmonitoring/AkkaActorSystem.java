@@ -12,7 +12,6 @@ public class AkkaActorSystem {
 
     private AkkaActorSystem() {
         this.system = ActorSystem.create("callMonitoring");
-
     }
 
     public static AkkaActorSystem getInstance() {

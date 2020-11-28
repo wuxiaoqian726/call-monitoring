@@ -7,7 +7,8 @@ public class CallSession {
     private String sessionId;
     private CallSessionStatus status;
     private Long toUserId;
-    private Long toExtensionId;
+    private Long toQueueId;
+    private Long toAgentId;
     private Date timeStamp;
     private int stepIndex = 0;
 
@@ -35,12 +36,20 @@ public class CallSession {
         this.toUserId = toUserId;
     }
 
-    public Long getToExtensionId() {
-        return toExtensionId;
+    public Long getToQueueId() {
+        return toQueueId;
     }
 
-    public void setToExtensionId(Long toExtensionId) {
-        this.toExtensionId = toExtensionId;
+    public void setToQueueId(Long toQueueId) {
+        this.toQueueId = toQueueId;
+    }
+
+    public Long getToAgentId() {
+        return toAgentId;
+    }
+
+    public void setToAgentId(Long toAgentId) {
+        this.toAgentId = toAgentId;
     }
 
     public int getStepIndex() {

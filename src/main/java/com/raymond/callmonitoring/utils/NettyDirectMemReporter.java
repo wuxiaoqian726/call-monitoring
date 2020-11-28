@@ -33,8 +33,8 @@ public class NettyDirectMemReporter {
 
 
     public void startReport() {
-        executor.scheduleAtFixedRate(() -> {
-            logger.info("netty direct memory size:{}b, max:{}", directMem.get(), PlatformDependent.maxDirectMemory());
-        }, 0, 1, TimeUnit.SECONDS);
+//        executor.scheduleAtFixedRate(() -> {
+//            logger.info("netty direct memory size:{}b, max:{}", directMem.get(), PlatformDependent.maxDirectMemory());
+//        }, 0, 1, TimeUnit.SECONDS);
     }
 }

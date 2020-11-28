@@ -1,11 +1,17 @@
-package com.raymond.callmonitoring.consumer;
+package com.raymond.callmonitoring.service;
 
-import com.raymond.callmonitoring.actor.CallSessionActorManager;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import com.raymond.callmonitoring.AkkaActorSystem;
+import com.raymond.callmonitoring.actor.CallSessionActor;
 import com.raymond.callmonitoring.model.CallSession;
+import com.raymond.callmonitoring.model.CallSessionStatus;
 import com.raymond.callmonitoring.utils.Constants;
 import com.raymond.callmonitoring.utils.JSONUtils;
+import com.raymond.callmonitoring.utils.Utils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
@@ -34,10 +40,23 @@ public class RocketMqConsumer implements CallConsumer {
                 public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                     for (MessageExt msg : msgs) {
                         String callSession = new String(msg.getBody(), Charset.forName("UTF-8"));
-                        //logger.info("consume message:{}", callSession);
-                        CallSessionActorManager.getInstance().sendCallSessionToAkkaActorSystem(JSONUtils.toObject(callSession, CallSession.class));
+                        logger.info("consume message:{}", callSession);
+                        this.sendCallSessionActor(JSONUtils.toObject(callSession, CallSession.class));
                     }
                     return ConsumeOrderlyStatus.SUCCESS;
+                }
+
+                public void sendCallSessionActor(CallSession callSession) {
+                    if (callSession.getToUserId() == null || StringUtils.isEmpty(callSession.getSessionId())) {
+                        return;
+                    }
+                    ActorSystem actorSystem = AkkaActorSystem.getInstance().getActorSystem();
+                    if (callSession.getStatus() == CallSessionStatus.Queue_Waiting) {
+                        ActorRef actorRef = actorSystem.actorOf(Props.create(CallSessionActor.class), Utils.getCallSessionActorName(callSession));
+                        actorRef.tell(callSession, ActorRef.noSender());
+                    } else {
+                        actorSystem.actorSelection(Utils.getCallSessionActorPath(callSession)).tell(callSession, ActorRef.noSender());
+                    }
                 }
             });
             consumer.start();
@@ -46,6 +65,8 @@ public class RocketMqConsumer implements CallConsumer {
         }
 
     }
+
+
 
 
 }

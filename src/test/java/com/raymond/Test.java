@@ -1,10 +1,13 @@
 package com.raymond;
 
 import com.raymond.callmonitoring.model.CallSession;
+import com.raymond.callmonitoring.model.CallSubscription;
 import com.raymond.callmonitoring.utils.Constants;
+import com.raymond.callmonitoring.utils.JSONUtils;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.ThreadFactoryImpl;
 
+import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -27,6 +30,11 @@ public class Test {
             consumeExecutor.submit(new Task(count, new LinkedBlockingQueue<>()));
             count--;
         }
+
+//        CallSubscription callSubscription = new CallSubscription();
+//        callSubscription.setUserId(1L);
+//        callSubscription.setQueueIdList(Arrays.asList(1L, 2L, 3L));
+//        System.out.println(JSONUtils.toJsonString(callSubscription));
     }
 
 

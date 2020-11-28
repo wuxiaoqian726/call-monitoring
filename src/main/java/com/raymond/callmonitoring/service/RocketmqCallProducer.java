@@ -1,7 +1,6 @@
-package com.raymond.callmonitoring.producer;
+package com.raymond.callmonitoring.service;
 
 import com.raymond.callmonitoring.model.CallSession;
-import com.raymond.callmonitoring.producer.CallProducer;
 import com.raymond.callmonitoring.utils.Constants;
 import com.raymond.callmonitoring.utils.JSONUtils;
 import org.apache.rocketmq.client.exception.MQBrokerException;

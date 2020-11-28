@@ -27,15 +27,15 @@ public class Client {
     }
 
     static class ClientTask implements Runnable {
-        private final String userId;
+        private final String queueId;
 
-        public ClientTask(String userId) {
-            this.userId = userId;
+        public ClientTask(String queueId) {
+            this.queueId = queueId;
         }
 
         @Override
         public void run() {
-            NotificationClient client = new NotificationClient(userId);
+            NotificationClient client = new NotificationClient(queueId);
             client.start();
         }
     }

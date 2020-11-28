@@ -1,7 +1,6 @@
-package com.raymond.callmonitoring.producer;
+package com.raymond.callmonitoring.service;
 
 import com.raymond.callmonitoring.model.CallSession;
-import com.raymond.callmonitoring.model.MockImMemoryQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
