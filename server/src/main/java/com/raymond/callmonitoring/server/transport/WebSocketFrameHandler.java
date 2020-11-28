@@ -9,7 +9,7 @@ import com.raymond.callmonitoring.common.JSONUtils;
 import com.raymond.callmonitoring.common.Utils;
 import com.raymond.callmonitoring.server.AkkaActorSystem;
 import com.raymond.callmonitoring.server.actor.CallSubscriptionActor;
-import com.raymond.callmonitoring.server.model.CallSubscription;
+import com.raymond.callmonitoring.model.CallSubscription;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;

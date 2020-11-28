@@ -88,7 +88,7 @@ public class CallSessionGeneratorImpl {
             CallSession session = new CallSession();
             session.setSessionId(generateSessionId());
             session.setToUserId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
-            session.setToQueueId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
+            session.setToQueueId(RandomUtils.nextLong(1, Constants.MAX_QUEUE_CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Queue_Waiting);
             session.setTimeStamp(new Date());
             return session;
@@ -102,7 +102,7 @@ public class CallSessionGeneratorImpl {
             session.setSessionId(previousSession.getSessionId());
             session.setToUserId(previousSession.getToUserId());
             session.setToQueueId(previousSession.getToQueueId());
-            session.setToAgentId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
+            session.setToAgentId(RandomUtils.nextLong(1, Constants.MAX_AGENT_CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Agent_Waiting);
             session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());

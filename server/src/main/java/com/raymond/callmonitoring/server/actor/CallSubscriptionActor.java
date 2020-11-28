@@ -8,7 +8,7 @@ import com.raymond.callmonitoring.server.model.CallSubscriptionOperation;
 import com.raymond.callmonitoring.server.model.CallSubscriptionOperationType;
 
 import com.raymond.callmonitoring.server.model.CallQueueStats;
-import com.raymond.callmonitoring.server.model.CallSubscription;
+import com.raymond.callmonitoring.model.CallSubscription;
 import com.raymond.callmonitoring.server.model.PullQueueStat;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;

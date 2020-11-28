@@ -1,4 +1,4 @@
-package com.raymond.callmonitoring.server.model;
+package com.raymond.callmonitoring.model;
 
 import io.netty.channel.Channel;
 

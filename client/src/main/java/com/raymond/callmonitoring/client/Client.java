@@ -10,13 +10,13 @@ import java.util.concurrent.Executors;
 
 public class Client {
 
-    private static final Executor executor = Executors.newFixedThreadPool(Constants.CONCURRENCY);
+    private static final Executor executor = Executors.newFixedThreadPool(20);
 
     public static void main(String[] args) throws InterruptedException, MQClientException {
         List<ClientTask> taskList = new ArrayList<>();
-        int count = Constants.CONCURRENCY;
+        int count = 100;//Constants.CONCURRENCY;
         while (count > 0) {
-            taskList.add(new ClientTask(String.valueOf(count)));
+            taskList.add(new ClientTask());
             count--;
         }
 
@@ -26,16 +26,11 @@ public class Client {
     }
 
     static class ClientTask implements Runnable {
-        private final String queueId;
-
-        public ClientTask(String queueId) {
-            this.queueId = queueId;
-        }
 
         @Override
         public void run() {
-            //NotificationClient client = new NotificationClient(queueId);
-            //client.start();
+            WebsocketClient websocketClient = new WebsocketClient();
+            websocketClient.createConnection();
         }
     }
 }
