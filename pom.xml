@@ -18,6 +18,14 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>client</module>
+        <module>emulator</module>
+        <module>model</module>
+        <module>server</module>
+        <module>mq</module>
+        <module>common</module>
+    </modules>
     <name>Call Monitoring</name>
     <packaging>pom</packaging>
     
