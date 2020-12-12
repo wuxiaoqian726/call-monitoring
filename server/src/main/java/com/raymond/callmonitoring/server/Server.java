@@ -1,21 +1,15 @@
 package com.raymond.callmonitoring.server;
 
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
 import akka.actor.Props;
 
 import com.raymond.callmonitoring.common.Constants;
 import com.raymond.callmonitoring.common.JSONUtils;
-import com.raymond.callmonitoring.common.Utils;
 import com.raymond.callmonitoring.model.CallSession;
-import com.raymond.callmonitoring.model.CallSessionStatus;
 import com.raymond.callmonitoring.mq.CallConsumer;
-import com.raymond.callmonitoring.mq.MockCallConsumer;
 import com.raymond.callmonitoring.mq.RocketMqConsumer;
-import com.raymond.callmonitoring.server.actor.CallSessionActor;
 import com.raymond.callmonitoring.server.actor.CallSubscriptionRouter;
+import com.raymond.callmonitoring.server.service.ActorService;
 import com.raymond.callmonitoring.server.transport.WebSocketNotificationServer;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -32,16 +26,14 @@ public class Server {
         AkkaActorSystem akkaActorSystem = AkkaActorSystem.getInstance();
         akkaActorSystem.getActorSystem().actorOf(Props.create(CallSubscriptionRouter.class), CallSubscriptionRouter.ACTOR_NAME);
 
-        CallConsumer callConsumer = getCallConsumer(false);
+        CallConsumer callConsumer = getCallConsumer();
         callConsumer.startConsuming();
 
         WebSocketNotificationServer webSocketNotificationServer = new WebSocketNotificationServer();
         webSocketNotificationServer.start();
     }
 
-    private static CallConsumer getCallConsumer(boolean mockMode) throws MQClientException {
-        if (mockMode)
-            return new MockCallConsumer();
+    private static CallConsumer getCallConsumer() throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(Constants.CONSUMER_GROUP_NAME);
         consumer.setNamesrvAddr("localhost:9876");
 
@@ -50,24 +42,13 @@ public class Server {
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 for (MessageExt msg : msgs) {
                     String callSession = new String(msg.getBody(), Charset.forName("UTF-8"));
-                    //logger.info("consume message:{}", callSession);
-                    this.sendCallSessionActor(JSONUtils.toObject(callSession, CallSession.class));
+                    ActorService actorService = new ActorService();
+                    actorService.sendCallSessionToActor(JSONUtils.toObject(callSession, CallSession.class));
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
 
-            public void sendCallSessionActor(CallSession callSession) {
-                if (callSession.getToUserId() == null || StringUtils.isEmpty(callSession.getSessionId())) {
-                    return;
-                }
-                ActorSystem actorSystem = AkkaActorSystem.getInstance().getActorSystem();
-                if (callSession.getStatus() == CallSessionStatus.Queue_Waiting) {
-                    ActorRef actorRef = actorSystem.actorOf(Props.create(CallSessionActor.class), Utils.getCallSessionActorName(callSession));
-                    actorRef.tell(callSession, ActorRef.noSender());
-                } else {
-                    actorSystem.actorSelection(Utils.getCallSessionActorPath(callSession)).tell(callSession, ActorRef.noSender());
-                }
-            }
+
         });
     }
 

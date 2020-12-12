@@ -10,8 +10,7 @@ import com.raymond.callmonitoring.server.model.CallSubscriptionOperationType;
 import com.raymond.callmonitoring.server.model.CallQueueStats;
 import com.raymond.callmonitoring.model.CallSubscription;
 import com.raymond.callmonitoring.server.model.PullQueueStat;
-import io.netty.channel.Channel;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import com.raymond.callmonitoring.server.service.NotificationAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,11 +18,11 @@ public class CallSubscriptionActor extends AbstractActor {
 
     private static final Logger logger = LoggerFactory.getLogger(CallSubscriptionActor.class);
 
-    private final Channel channel;
+    private final NotificationAPI notificationAPI;
     private final CallSubscription callSubscription;
 
-    public CallSubscriptionActor(Channel channel, CallSubscription callSubscription) {
-        this.channel = channel;
+    public CallSubscriptionActor(NotificationAPI notificationAPI, CallSubscription callSubscription) {
+        this.notificationAPI = notificationAPI;
         this.callSubscription = callSubscription;
     }
 
@@ -54,13 +53,10 @@ public class CallSubscriptionActor extends AbstractActor {
         subscribeOperation.setOperationType(type);
         subscribeOperation.setQueueId(callSubscription.getQueueIdList());
         AkkaActorSystem.getInstance().getActorSystem().actorSelection(Utils.getActorPath(CallSubscriptionRouter.ACTOR_NAME)).tell(subscribeOperation, this.self());
-
     }
 
     private void handlePullQueueStat(PullQueueStat pullQueueStat) {
         CallQueueStats callQueueStats = CallStatsHolder.getQueueStats(pullQueueStat.getQueueId());
-        if (this.channel.isWritable()) {
-            this.channel.writeAndFlush(new TextWebSocketFrame(JSONUtils.toJsonString(callQueueStats)));
-        }
+        notificationAPI.sendNotification(callQueueStats);
     }
 }

@@ -9,10 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mq</artifactId>
+    <artifactId>it</artifactId>
 
     <dependencies>
-
         <dependency>
             <artifactId>model</artifactId>
             <groupId>com.raymond</groupId>
@@ -21,6 +20,19 @@
 
         <dependency>
             <artifactId>common</artifactId>
+            <groupId>com.raymond</groupId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>mq</artifactId>
+            <groupId>com.raymond</groupId>
+            <version>1.0.0</version>
+        </dependency>
+
+
+        <dependency>
+            <artifactId>server</artifactId>
             <groupId>com.raymond</groupId>
             <version>1.0.0</version>
         </dependency>

@@ -16,7 +16,6 @@ public class CallStatsHolder {
 
     public static void addQueueWaitingCall(CallSession callSession) {
         if (!map.containsKey(callSession.getToQueueId())) {
-            //TODO: double check thread safe.
             ConcurrentHashMap<String, Long> queueMap = new ConcurrentHashMap<>();
             queueMap.put(callSession.getSessionId(), callSession.getTimeStamp().getTime());
             ConcurrentHashMap<String, Long> existingMap = map.putIfAbsent(callSession.getToQueueId(), queueMap);

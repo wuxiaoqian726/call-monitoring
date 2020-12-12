@@ -80,13 +80,11 @@ public class CallSessionGeneratorImpl {
 
     private class InitialCallGenerator implements CallSessionGenerator {
 
-        private String generateSessionId(){
-            return "Session-" + Thread.currentThread().getId() + "-" + RandomStringUtils.randomAlphabetic(10);
-        }
+
 
         public CallSession generate(CallSession previousSession) {
             CallSession session = new CallSession();
-            session.setSessionId(generateSessionId());
+            session.setSessionId(EmulatorUtils.generateSessionId());
             session.setToUserId(RandomUtils.nextLong(1, Constants.CONCURRENCY + 1));
             session.setToQueueId(RandomUtils.nextLong(1, Constants.MAX_QUEUE_CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Queue_Waiting);

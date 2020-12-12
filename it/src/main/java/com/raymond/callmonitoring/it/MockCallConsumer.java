@@ -1,6 +1,8 @@
-package com.raymond.callmonitoring.mq;
+package com.raymond.callmonitoring.it;
 
 import com.raymond.callmonitoring.model.CallSession;
+import com.raymond.callmonitoring.mq.CallConsumer;
+import com.raymond.callmonitoring.server.service.ActorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,15 +21,14 @@ public class MockCallConsumer implements CallConsumer {
                 while (true) {
                     try {
                         CallSession callSession = MockImMemoryQueue.getInstance().pullMessage();
-                        //logger.info("consume message:{}", JSONUtils.toJsonString(callSession));
-                        //CallSessionActorManager.getInstance().sendCallSessionToActorSystem(callSession);
+                        ActorService actorService=new ActorService();
+                        actorService.sendCallSessionToActor(callSession);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }
         });
-
     }
 
 

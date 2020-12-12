@@ -10,6 +10,7 @@ import com.raymond.callmonitoring.common.Utils;
 import com.raymond.callmonitoring.server.AkkaActorSystem;
 import com.raymond.callmonitoring.server.actor.CallSubscriptionActor;
 import com.raymond.callmonitoring.model.CallSubscription;
+import com.raymond.callmonitoring.server.service.ActorService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -35,9 +36,12 @@ public class WebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocket
                     throw new IllegalStateException("invalid subscription...");
                 }
                 logger.info("received subscription:{}", callSubscription.getQueueIdList());
-                ActorSystem actorSystem = AkkaActorSystem.getInstance().getActorSystem();
+
                 String uniqueChannelId = Utils.getUniqueChannelId(ctx.channel());
-                actorSystem.actorOf(Props.create(CallSubscriptionActor.class, ctx.channel(), callSubscription), uniqueChannelId);
+                WebSocketNotificationAPIImpl websocketNotificationAPI = new WebSocketNotificationAPIImpl(ctx.channel());
+                ActorService actorService = new ActorService();
+                actorService.createCallSubscriptionActor(websocketNotificationAPI, callSubscription, uniqueChannelId);
+                //actorSystem.actorOf(Props.create(CallSubscriptionActor.class, websocketNotificationAPI, callSubscription), uniqueChannelId);
             }catch (Exception e){
                 //TODO: handle json parse and other exceptions;
             }

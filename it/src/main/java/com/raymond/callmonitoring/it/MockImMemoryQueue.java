@@ -1,4 +1,4 @@
-package com.raymond.callmonitoring.mq;
+package com.raymond.callmonitoring.it;
 
 import com.raymond.callmonitoring.model.CallSession;
 
