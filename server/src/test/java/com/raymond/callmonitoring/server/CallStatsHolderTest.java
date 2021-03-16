@@ -1,22 +1,18 @@
 package com.raymond.callmonitoring.server;
 
 import com.raymond.callmonitoring.emulator.CallSessionBuilder;
-import com.raymond.callmonitoring.emulator.CallSessionGeneratorImpl;
 import com.raymond.callmonitoring.model.CallSession;
 import com.raymond.callmonitoring.server.actor.CallStatsHolder;
 import com.raymond.callmonitoring.server.model.CallQueueStats;
-import org.apache.commons.lang3.time.DateUtils;
-import org.apache.rocketmq.common.CountDownLatch2;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 
 public class CallStatsHolderTest {
-
 
     @Test
     public void testForSingleThread() {
@@ -28,7 +24,7 @@ public class CallStatsHolderTest {
         CallStatsHolder.addQueueWaitingCall(callSessionWithTenSecondsAgo);
         CallStatsHolder.addQueueWaitingCall(builder.buildCallQueueWaitingSessionWithTimestamp(1L, now));
         CallStatsHolder.addQueueWaitingCall(builder.buildCallQueueWaitingSessionWithTimestamp(2L, now));
-        CallStatsHolder.addQueueWaitingCall(builder.buildCallQueueWaitingSession(3L));
+        CallStatsHolder.addQueueWaitingCall(builder.buildCallQueueWaitingSessionWithTimestamp(3L, new Date()));
 
         CallQueueStats callQueueStats1 = CallStatsHolder.getQueueStats(1L);
         Assert.assertEquals(callQueueStats1.getWaitingCount(), 2);

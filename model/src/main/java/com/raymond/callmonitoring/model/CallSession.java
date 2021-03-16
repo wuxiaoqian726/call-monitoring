@@ -1,8 +1,10 @@
 package com.raymond.callmonitoring.model;
 
 import java.util.Date;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.TimeUnit;
 
-public class CallSession {
+public class CallSession implements Delayed {
 
     private String sessionId;
     private CallSessionStatus status;
@@ -52,20 +54,22 @@ public class CallSession {
         this.toAgentId = toAgentId;
     }
 
-    public int getStepIndex() {
-        return stepIndex;
-    }
-
-    public void setStepIndex(int stepIndex) {
-        this.stepIndex = stepIndex;
-    }
-
     public Date getTimeStamp() {
         return timeStamp;
     }
 
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public long getDelay(TimeUnit unit) {
+        return new Date().getTime() - this.getTimeStamp().getTime();
+    }
+
+    @Override
+    public int compareTo(Delayed o) {
+        return this.getTimeStamp().compareTo(((CallSession) o).getTimeStamp());
     }
 
 }

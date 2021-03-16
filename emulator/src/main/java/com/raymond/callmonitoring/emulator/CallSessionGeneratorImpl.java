@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class CallSessionGeneratorImpl {
 
-    private Map<CallSessionStatus,List<NextPhaseStatus>> statusRelationMap=new HashMap();
+    private Map<CallSessionStatus, List<NextPhaseStatus>> statusRelationMap = new HashMap();
     private Map<CallSessionStatus, CallSessionGenerator> statsGeneratorMap = new HashMap();
 
     public CallSessionGeneratorImpl() {
@@ -26,7 +26,7 @@ public class CallSessionGeneratorImpl {
         statsGeneratorMap.put(CallSessionStatus.Calling, new CallingCallGenerator());
         statsGeneratorMap.put(CallSessionStatus.Holding, new HoldingCallGenerator());
         statsGeneratorMap.put(CallSessionStatus.Ended, new EndedCallGenerator());
-        statsGeneratorMap.put(CallSessionStatus.Abandoned, new AgentCallingCallGenerator());
+        statsGeneratorMap.put(CallSessionStatus.Abandoned, new AbandonedCallGenerator());
     }
 
     public CallSession generateInitialCall(){
@@ -102,7 +102,6 @@ public class CallSessionGeneratorImpl {
             session.setToQueueId(previousSession.getToQueueId());
             session.setToAgentId(RandomUtils.nextLong(1, Constants.MAX_AGENT_CONCURRENCY + 1));
             session.setStatus(CallSessionStatus.Agent_Waiting);
-            session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
             return session;
         }
@@ -117,7 +116,6 @@ public class CallSessionGeneratorImpl {
             session.setToQueueId(previousSession.getToQueueId());
             session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Calling);
-            session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
             return session;
         }
@@ -132,7 +130,6 @@ public class CallSessionGeneratorImpl {
             session.setToQueueId(previousSession.getToQueueId());
             session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Holding);
-            session.setStepIndex(session.getStepIndex()+1);
             session.setTimeStamp(new Date());
             return session;
         }
@@ -146,7 +143,19 @@ public class CallSessionGeneratorImpl {
             session.setToQueueId(previousSession.getToQueueId());
             session.setToAgentId(previousSession.getToAgentId());
             session.setStatus(CallSessionStatus.Ended);
-            session.setStepIndex(session.getStepIndex()+1);
+            session.setTimeStamp(new Date());
+            return session;
+        }
+    }
+
+    public static class AbandonedCallGenerator implements CallSessionGenerator {
+        public CallSession generate(CallSession previousSession) {
+            CallSession session = new CallSession();
+            session.setSessionId(previousSession.getSessionId());
+            session.setToUserId(previousSession.getToUserId());
+            session.setToQueueId(previousSession.getToQueueId());
+            session.setToAgentId(previousSession.getToAgentId());
+            session.setStatus(CallSessionStatus.Abandoned);
             session.setTimeStamp(new Date());
             return session;
         }

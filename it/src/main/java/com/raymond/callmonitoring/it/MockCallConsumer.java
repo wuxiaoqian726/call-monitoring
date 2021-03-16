@@ -1,5 +1,6 @@
 package com.raymond.callmonitoring.it;
 
+import com.raymond.callmonitoring.common.JSONUtils;
 import com.raymond.callmonitoring.model.CallSession;
 import com.raymond.callmonitoring.mq.CallConsumer;
 import com.raymond.callmonitoring.server.service.ActorService;
@@ -21,10 +22,11 @@ public class MockCallConsumer implements CallConsumer {
                 while (true) {
                     try {
                         CallSession callSession = MockImMemoryQueue.getInstance().pullMessage();
-                        ActorService actorService=new ActorService();
+                        //logger.info(JSONUtils.toJsonString(callSession));
+                        ActorService actorService = new ActorService();
                         actorService.sendCallSessionToActor(callSession);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.error("error happens:", e);
                     }
                 }
             }

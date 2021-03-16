@@ -8,7 +8,7 @@ public enum CallSessionStatus {
     Abandoned,
     Ended;
 
-    public static boolean finishedCall(CallSessionStatus status) {
+    public static boolean isFinishedCall(CallSessionStatus status) {
         return status == Ended || status == Abandoned;
     }
 

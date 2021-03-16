@@ -35,7 +35,7 @@ public class CallSessionActor extends AbstractActor {
 
             CallSubscriptionEventBus.getInstance().publish(new PullQueueStat(callSession.getToQueueId()));
 
-            if (CallSessionStatus.finishedCall(callSession.getStatus())) {
+            if (CallSessionStatus.isFinishedCall(callSession.getStatus())) {
                 getContext().stop(getSelf());
             }
         } catch (Exception e) {

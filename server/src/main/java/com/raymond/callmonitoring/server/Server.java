@@ -2,6 +2,7 @@ package com.raymond.callmonitoring.server;
 
 import akka.actor.Props;
 
+import com.google.common.base.Charsets;
 import com.raymond.callmonitoring.common.Constants;
 import com.raymond.callmonitoring.common.JSONUtils;
 import com.raymond.callmonitoring.model.CallSession;
@@ -41,14 +42,12 @@ public class Server {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 for (MessageExt msg : msgs) {
-                    String callSession = new String(msg.getBody(), Charset.forName("UTF-8"));
+                    String callSession = new String(msg.getBody(), Charsets.UTF_8);
                     ActorService actorService = new ActorService();
                     actorService.sendCallSessionToActor(JSONUtils.toObject(callSession, CallSession.class));
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
-
-
         });
     }
 
