@@ -20,17 +20,15 @@ import java.util.concurrent.ExecutionException;
 
 public class WebsocketClient {
 
-    private static String HOST = "ws://127.0.0.1:8080/websocket";
     private static final Logger logger = LoggerFactory.getLogger(WebsocketClient.class);
     private static final AsyncHttpClient asyncClient = Dsl.asyncHttpClient();
 
-    public void createConnection() {
+    public void createConnection(String host) {
         try {
-            WebSocket webSocket = asyncClient.prepareGet(HOST)
+            WebSocket webSocket = asyncClient.prepareGet(host)
                     .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new WebSocketListener() {
                         @Override
                         public void onOpen(WebSocket websocket) {
-                            System.out.println(" websocket open, send data");
                             CallSubscription callSubscription = createCallSubscription();
                             websocket.sendTextFrame(JSONUtils.toJsonString(callSubscription));
                         }
@@ -45,12 +43,12 @@ public class WebsocketClient {
 
                         @Override
                         public void onTextFrame(String payload, boolean finalFragment, int rsv) {
-                            System.out.println("client receive message:" + payload);
+                            logger.info("client receive message:" + payload);
                         }
 
                     }).build()).get();
         } catch (Exception e) {
-            logger.info("websocket exception:{}", e);
+            logger.error("websocket exception:{}", e);
         }
     }
 

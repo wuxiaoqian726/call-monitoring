@@ -18,18 +18,14 @@
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
             <includes>
-                <include>com.raymond:server</include>
-                <include>com.raymond:model</include>
-                <include>com.raymond:common</include>
-                <include>com.raymond:mq</include>
-                <include>com.raymond:emulator</include>
+                <include>com.raymond:client</include>
             </includes>
             <binaries>
-                <outputDirectory>lib/</outputDirectory>
+                <outputDirectory>client-lib/</outputDirectory>
                 <unpack>false</unpack>
                 <dependencySets>
                     <dependencySet>
-                        <outputDirectory>lib/</outputDirectory>
+                        <outputDirectory>client-lib/</outputDirectory>
                     </dependencySet>
                 </dependencySets>
             </binaries>
