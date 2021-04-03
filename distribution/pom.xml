@@ -61,7 +61,7 @@
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/assembly/bin.xml</descriptor>
+                                <descriptor>release.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
