@@ -16,6 +16,16 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/bin.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <modules>
@@ -26,10 +36,11 @@
         <module>mq</module>
         <module>common</module>
         <module>it</module>
+        <module>distribution</module>
     </modules>
     <name>Call Monitoring</name>
     <packaging>pom</packaging>
-    
+
 
     <dependencies>
         <dependency>
