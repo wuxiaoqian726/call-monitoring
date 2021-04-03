@@ -19,13 +19,13 @@ public class CallSubscriptionRouter extends AbstractActor {
         return receiveBuilder()
                 .match(CallSubscriptionOperation.class, subscribeOperation -> {
                     if (subscribeOperation.getOperationType() == CallSubscriptionOperationType.Subscribe) {
-                        logger.info("subscribe...");
+                        logger.debug("subscribe...");
                         subscribeOperation.getQueueId().forEach(item->{
                             CallSubscriptionEventBus.getInstance().subscribe(sender(), item);
                             sender().tell(new PullQueueStat(item), ActorRef.noSender());
                         });
                     } else {
-                        logger.info("unsubscribe...");
+                        logger.debug("unsubscribe...");
                         subscribeOperation.getQueueId().forEach(item->{
                             CallSubscriptionEventBus.getInstance().unsubscribe(sender(), item);
                         });

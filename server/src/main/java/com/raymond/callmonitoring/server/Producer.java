@@ -11,7 +11,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 public class Producer {
 
     public static void main(String[] args) throws InterruptedException, MQClientException {
-        CallEmulator callEmulator = new CallEmulator(getCallProducer(),10);
+        CallEmulator callEmulator = new CallEmulator(getCallProducer(),1000);
         callEmulator.start();
         Thread.currentThread().join();
     }

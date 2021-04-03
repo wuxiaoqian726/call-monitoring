@@ -11,6 +11,8 @@ import org.asynchttpclient.ws.WebSocket;
 import org.asynchttpclient.ws.WebSocketListener;
 import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 import org.asynchttpclient.ws.WebSocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +21,12 @@ import java.util.concurrent.ExecutionException;
 public class WebsocketClient {
 
     private static String HOST = "ws://127.0.0.1:8080/websocket";
+    private static final Logger logger = LoggerFactory.getLogger(WebsocketClient.class);
+    private static final AsyncHttpClient asyncClient = Dsl.asyncHttpClient();
 
     public void createConnection() {
         try {
-            WebSocket webSocket = Dsl.asyncHttpClient().prepareGet(HOST)
+            WebSocket webSocket = asyncClient.prepareGet(HOST)
                     .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(new WebSocketListener() {
                         @Override
                         public void onOpen(WebSocket websocket) {
@@ -46,7 +50,7 @@ public class WebsocketClient {
 
                     }).build()).get();
         } catch (Exception e) {
-            System.out.println("websocket exception:" + e.getStackTrace());
+            logger.info("websocket exception:{}", e);
         }
     }
 

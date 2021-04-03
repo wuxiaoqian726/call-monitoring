@@ -28,7 +28,7 @@ public class CallSubscriptionActor extends AbstractActor {
 
     @Override
     public void preStart() throws Exception {
-        logger.info("CallSubscriptionActor start...");
+        logger.debug("CallSubscriptionActor start...");
         super.preStart();
         this.subscribeOrUnSubscribe(CallSubscriptionOperationType.Subscribe);
     }
@@ -43,7 +43,7 @@ public class CallSubscriptionActor extends AbstractActor {
 
     @Override
     public void postStop() throws Exception {
-        logger.info("stop subscription actor....");
+        logger.debug("stop subscription actor....");
         this.subscribeOrUnSubscribe(CallSubscriptionOperationType.UnSubscribe);
         super.postStop();
     }

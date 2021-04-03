@@ -14,7 +14,7 @@ public class Client {
 
     public static void main(String[] args) throws InterruptedException, MQClientException {
         List<ClientTask> taskList = new ArrayList<>();
-        int count = 100;//Constants.CONCURRENCY;
+        int count = 1500;//Constants.CONCURRENCY;
         while (count > 0) {
             taskList.add(new ClientTask());
             count--;

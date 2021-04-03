@@ -2,6 +2,7 @@ package com.raymond.callmonitoring.it;
 
 import com.raymond.callmonitoring.model.CallSession;
 import com.raymond.callmonitoring.mq.CallConsumer;
+import com.raymond.callmonitoring.server.Monitor;
 import com.raymond.callmonitoring.server.service.ActorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,6 @@ public class AsyncMockCallConsumer implements CallConsumer {
                 while (true) {
                     try {
                         CallSession callSession = MockInMemoryQueue.getInstance().pullMessage();
-                        //logger.info(JSONUtils.toJsonString(callSession));
                         ActorService actorService = new ActorService();
                         actorService.sendCallSessionToActor(callSession);
                     } catch (InterruptedException e) {

@@ -1,5 +1,6 @@
 package com.raymond.callmonitoring.server.transport;
 
+import com.raymond.callmonitoring.server.Monitor;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -11,10 +12,6 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
 
     private static final String WEBSOCKET_PATH = "/websocket";
-
-    public WebSocketServerInitializer() {
-
-    }
 
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
