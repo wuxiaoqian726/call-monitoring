@@ -16,7 +16,7 @@ error_exit ()
 export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
-# export CLASSPATH=.:${BASE_DIR}:${CLASSPATH}
+# export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
 
 #===========================================================================================
 # JVM Configuration
@@ -63,4 +63,4 @@ JAVA_OPT="${JAVA_OPT} ${JAVA_OPT_EXT}"
 JAVA_OPT="${JAVA_OPT} -cp ${CLASSPATH}"
 
 rm -rf ${BASE_DIR}/client-lib/netty-all-4.0.42.Final.jar
-$JAVA ${JAVA_OPT} client-1.0.0.jar com.raymond.callmonitoring.client.Client 10 ws://127.0.0.1:8080/websocket
+$JAVA ${JAVA_OPT} client-1.0.0.jar com.raymond.callmonitoring.client.BenchmarkClient $@

@@ -4,8 +4,8 @@ import akka.actor.AbstractActor;
 import com.raymond.callmonitoring.common.Utils;
 import com.raymond.callmonitoring.model.CallSession;
 import com.raymond.callmonitoring.model.CallSessionStatus;
+import com.raymond.callmonitoring.server.Monitor;
 import com.raymond.callmonitoring.server.model.PullQueueStat;
-import com.raymond.callmonitoring.server.utils.AkkaActorMonitoring;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +45,8 @@ public class CallSessionActor extends AbstractActor {
     }
 
     private void logLatencyIfNeeded(CallSession callSession) {
-        if (Utils.diffTimestamp(callSession.getTimeStamp()) > AkkaActorMonitoring.CONSUMING_LATENCY_THRESHOLD_MILLISECONDS) {
-            AkkaActorMonitoring.addConsumingLatencyCount();
+        if (Utils.diffTimestamp(callSession.getTimeStamp()) > Monitor.CONSUMING_LATENCY_THRESHOLD_MILLISECONDS * 2) {
+            Monitor.incAkkaConsumedMsgDelayCount();
             logger.warn("call session latency warning,userId:{},sessionId:{},status:{},time:{}",callSession.getToUserId(), callSession.getSessionId(), callSession.getStatus(), callSession.getTimeStamp());
         }
     }

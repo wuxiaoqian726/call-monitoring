@@ -1,6 +1,5 @@
 package com.raymond.callmonitoring.server.transport;
 
-import com.raymond.callmonitoring.server.Monitor;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -14,7 +13,8 @@ import org.slf4j.LoggerFactory;
 public class WebSocketNotificationServer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketNotificationServer.class);
-    private static NettyDirectMemReporter reporter = new NettyDirectMemReporter();
+    public static final int DEFAULT_SO_SNDBUF = 8192;
+    public static final int DEFAULT_SO_RCVBUF = 8192;
 
     public void start() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -23,13 +23,16 @@ public class WebSocketNotificationServer {
                 .group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
                 .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+                .childOption(ChannelOption.SO_REUSEADDR,true)
+                .childOption(ChannelOption.TCP_NODELAY,true)
+                .childOption(ChannelOption.SO_RCVBUF,DEFAULT_SO_RCVBUF)
+                .childOption(ChannelOption.SO_SNDBUF,DEFAULT_SO_SNDBUF)
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new WebSocketServerInitializer());
 
         try {
             logger.info("start.....");
             ChannelFuture future = bootstrap.bind(8080).sync();
-            reporter.startReport();
             future.channel().closeFuture().sync();
             logger.info("finished to start....");
         } catch (InterruptedException e) {

@@ -16,7 +16,7 @@ error_exit ()
 export JAVA_HOME
 export JAVA="$JAVA_HOME/bin/java"
 export BASE_DIR=$(dirname $0)/..
-$ export CLASSPATH=.:${BASE_DIR}:${CLASSPATH}
+# export CLASSPATH=.:${BASE_DIR}/conf:${CLASSPATH}
 
 #===========================================================================================
 # JVM Configuration

@@ -12,7 +12,7 @@ import com.raymond.callmonitoring.mq.RocketMqConsumer;
 import com.raymond.callmonitoring.server.actor.CallSubscriptionRouter;
 import com.raymond.callmonitoring.server.service.ActorService;
 import com.raymond.callmonitoring.server.transport.WebSocketNotificationServer;
-import com.raymond.callmonitoring.server.utils.AkkaActorMonitoring;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -32,8 +32,8 @@ public class Server {
     public static void main(String[] args) throws InterruptedException, MQClientException {
         AkkaActorSystem akkaActorSystem = AkkaActorSystem.getInstance();
         akkaActorSystem.getActorSystem().actorOf(Props.create(CallSubscriptionRouter.class), CallSubscriptionRouter.ACTOR_NAME);
-
-        CallConsumer callConsumer = getMockConsumer();//getRocketMqCallConsumer();
+        boolean rocketMQMode = args.length > 0 ? BooleanUtils.toBoolean(args[0]) : false;
+        CallConsumer callConsumer = rocketMQMode ? getRocketMqCallConsumer() : getMockConsumer();
         callConsumer.startConsuming();
 
         Monitor.startReport();
@@ -44,7 +44,7 @@ public class Server {
     }
 
     private static CallConsumer getMockConsumer(){
-        CallConsumer callConsumer =new CallConsumer() {
+        CallConsumer callConsumer = new CallConsumer() {
             @Override
             public void startConsuming() {
 
@@ -63,7 +63,7 @@ public class Server {
                 for (MessageExt msg : msgs) {
                     Monitor.incConsumedMsgCount();
                     CallSession callSession = JSONUtils.toObject(new String(msg.getBody(), Charsets.UTF_8),CallSession.class);
-                    if (Utils.diffTimestamp(callSession.getTimeStamp()) > AkkaActorMonitoring.CONSUMING_LATENCY_THRESHOLD_MILLISECONDS) {
+                    if (Utils.diffTimestamp(callSession.getTimeStamp()) > Monitor.CONSUMING_LATENCY_THRESHOLD_MILLISECONDS) {
                         Monitor.incConsumedMsgDelayCount();
                         logger.warn("consuming latency warning,userId:{},sessionId:{},status:{},time:{}",callSession.getToUserId(), callSession.getSessionId(), callSession.getStatus(), callSession.getTimeStamp());
                     }

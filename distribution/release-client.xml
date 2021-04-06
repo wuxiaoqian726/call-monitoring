@@ -12,6 +12,12 @@
             </includes>
             <fileMode>0755</fileMode>
         </fileSet>
+        <fileSet>
+            <includes>
+                <include>conf/**</include>
+            </includes>
+        </fileSet>
+
     </fileSets>
     <includeBaseDirectory>false</includeBaseDirectory>
     <moduleSets>
